@@ -1,0 +1,6 @@
+#summary Dependencies
+#labels Featured
+== Depends on: ==
+
+ * [http://code.google.com/p/xyphpexception/ XhochY PHP Exception Framework]
+ * [http://www.php.net/ PHP 5]
