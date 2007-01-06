@@ -1,7 +1,15 @@
 <?php
 /**
+ * Main file of the XYSession-Library
+ *
+ * @package XYSession
+ * @author Uwe L. Korn <uwelk@xhochy.org>
+ */
+
+/**
  * Stores Information for a certain time
  *
+ * @package XYSession
  * @author Uwe L. Korn <uwelk@xhochy.org>
  */
 class CSession
@@ -43,16 +51,16 @@ class CSession
     /**
      * Ein SimpleXML-Objekt, welches die Daten der Session enthaelt
      * 
-     * @auhtor Uwe L. Korn <uwelk@xhochy.org>
-     * @type SimpleXML
+     * @author Uwe L. Korn <uwelk@xhochy.org>
+     * @var SimpleXML
      */
     private $data;
 
     /** 
      * Die ID der Session
      * 
-     * @auhtor Uwe L. Korn
-     * @type string
+     * @author Uwe L. Korn
+     * @var string
      */
     private $sID;
 
@@ -182,7 +190,7 @@ class CSession
     /**
      * Schaut nach, ob die Session gesperrt ist
      * 
-     * @auhtor Uwe L. Korn <uwelk@xhochy.org>
+     * @author Uwe L. Korn <uwelk@xhochy.org>
      * @param string $sID Die ID der Session
      * @return mixed false if not locked, else 'locked'
      */

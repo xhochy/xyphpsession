@@ -1,0 +1,3 @@
+To generate the documentation in the directory doc/, use the script
+
+    ./makedoc.sh <location of xyexception.exception.php>

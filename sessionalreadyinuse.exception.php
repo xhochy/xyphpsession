@@ -1,8 +1,16 @@
 <?php
 /**
+ * File containing an exception
+ *
+ * @package XYSession
+ * @author Uwe L. Korn <uwelk@xhochy.org>
+ */
+ 
+/**
  * Wird geworfen, wenn eine Session schon benutzt wird.
  *
  * @author Uwe L. Korn <uwelk@xhochy.org>
+ * @package XYSession
  */
 class SessionAlreadyInUseException extends XYException
 {
