@@ -17,6 +17,7 @@ class CSession
     public function __construct($sID)
     {
         Global $_CONFIG;
+        $sID = basename($sID);
         //Lock
         if(!@symlink('locked',$_CONFIG['SessionDir'].'/'.$sID.'.session-lock'))
         {
@@ -101,6 +102,9 @@ class CSession
     public static function Exists($sID)
     {
         Global $_CONFIG;
+
+        $sID = basename($sID);
+
         if(file_exists($_CONFIG['SessionDir'].'/'.$sID.'.session'))
         {
             if(CSession::TimedOut($sID))
@@ -125,6 +129,9 @@ class CSession
     public static function TimedOut($sID)
     {
         Global $_CONFIG;
+        
+        $sID = basename($sID);
+
         if(($oXML = @simplexml_load_file($_CONFIG['SessionDir'].'/'.$sID.'.session')) == false)
             return true;
         $nLifetime = (int)((string)($oXML->lifetime));
@@ -151,6 +158,9 @@ class CSession
     public static function RemoveSession($sID)
     {
         Global $_CONFIG;
+
+        $sID = basename($sID);
+
         @unlink($_CONFIG['SessionDir'].'/'.$sID.'.session');
         @unlink($_CONFIG['SessionDir'].'/'.$sID.'.session-lock');
     }
@@ -188,6 +198,18 @@ class CSession
     }
 
     /**
+     * Ueberprueft, ob der Eintrag existiert
+     * 
+     * @author Uwe L. Korn <uwelk@xhochy.org>
+     * @param string $sKey
+     * @return bool
+     */
+    public function KeysExists($sKey)
+    {
+        return isset($this->data->$sKey);
+    }
+
+    /**
      * Schaut nach, ob die Session gesperrt ist
      * 
      * @author Uwe L. Korn <uwelk@xhochy.org>
@@ -197,6 +219,9 @@ class CSession
     public static function Locked($sID)
     {
         Global $_CONFIG;
+
+        $sID = basename($sID);
+
         return @readlink($_CONFIG['SessionDir'].'/'.$sID.'.session-lock');
     }
 
