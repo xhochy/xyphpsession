@@ -204,7 +204,7 @@ class CSession
      * @param string $sKey
      * @return bool
      */
-    public function KeysExists($sKey)
+    public function KeyExists($sKey)
     {
         return isset($this->data->$sKey);
     }
