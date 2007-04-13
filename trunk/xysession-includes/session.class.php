@@ -4,6 +4,7 @@
  *
  * @package XYSession
  * @author Uwe L. Korn <uwelk@xhochy.org>
+ * @license http://opensource.org/licenses/mit-license.php MIT
  */
 
 /**
@@ -18,35 +19,32 @@ class CSession
     {
         Global $_CONFIG;
         $sID = basename($sID);
+        $this->sID = $sID;
+        
         //Lock
-        if(!@symlink('locked',$_CONFIG['SessionDir'].'/'.$sID.'.session-lock'))
-        {
+        if (!@symlink('locked',$_CONFIG['SessionDir'].'/'.$sID.'.session-lock')) {
             $oException = new SessionAlreadyInUseException($_CONFIG['SessionDir'].'/'.$sID.'.session');
-            $oException->AddTrace(__FILE__, __LINE__, __FUNCTION__, __CLASS__);
             $oException->AddVar('filename',$_CONFIG['SessionDir'].'/'.$sID.'.session');
             $oException->AddVar('SessionID',$sID);
             throw $oException;
         }
+        
         //TimeOut?
-        if(CSession::TimedOut($sID))
-        {
+        if (CSession::TimedOut($sID)) {
             CSession::RemoveSession($sID);
             $oException = new SessionTimedOutException($sID);
-            $oException->AddTrace(__FILE__, __LINE__, __FUNCTION__, __CLASS__);
             $oException->AddVar('filename',$_CONFIG['SessionDir'].'/'.$sID.'.session');
             $oException->AddVar('SessionID',$sID);
             throw $oException;
         }
+        
         //Load
-        if(!($this->data = simplexml_load_file($_CONFIG['SessionDir'].'/'.$sID.'.session')))
-        {
+        if (!($this->data = simplexml_load_file($_CONFIG['SessionDir'].'/'.$sID.'.session'))) {
             $oException = new SessionNotLoadableException($_CONFIG['SessionDir'].'/'.$sID.'.session');
-            $oException->AddTrace(__FILE__, __LINE__, __FUNCTION__, __CLASS__);
             $oException->AddVar('filename',$_CONFIG['SessionDir'].'/'.$sID.'.session');
             $oException->AddVar('SessionID',$sID);
             throw $oException;
         }
-        $this->sID = $sID;
     }
 
     /**
@@ -87,6 +85,7 @@ class CSession
             ."<creationtime>".time()."</creationtime></session>";
         fwrite($hFile, $sNew);
         fclose($hFile);
+        
         return new CSession($sID);
     }
 
@@ -105,18 +104,20 @@ class CSession
 
         $sID = basename($sID);
 
-        if(file_exists($_CONFIG['SessionDir'].'/'.$sID.'.session'))
-        {
-            if(CSession::TimedOut($sID))
-            {
-                if(CSession::Locked($sID)) 
+        if (file_exists($_CONFIG['SessionDir'].'/'.$sID.'.session')) {
+            if (CSession::TimedOut($sID)) {
+                if(CSession::Locked($sID)) { 
                     return true;
+                }
+                
                 CSession::RemoveSession($sID);
                 return false;
-            }
-            else return true;
-        }
-        else return false;// does not exist
+            } else {
+            	return true;
+            } 
+        } else {
+        	return false;	
+        }// does not exist
     }
 
     /**
@@ -132,20 +133,24 @@ class CSession
         
         $sID = basename($sID);
 
-        if(($oXML = @simplexml_load_file($_CONFIG['SessionDir'].'/'.$sID.'.session')) == false)
-            return true;
+        if (($oXML = @simplexml_load_file($_CONFIG['SessionDir'].'/'.$sID.'.session')) == false) {
+        	return true;
+        } 
+        
         $nLifetime = (int)((string)($oXML->lifetime));
         $bRefresh = ((string)($oXML->lifetime['refreshable'])) == 'true';
-        if($bRefresh)
+        if ($bRefresh) {
             $nStartTime = fileatime($_CONFIG['SessionDir'].'/'.$sID.'.session');
-        else
+        } else {
             $nStartTime = (int)((string)($oXML->creationtime));
+        }
 
         // Noch Lebenszeit?
-        if($nStartTime + $nLifetime > time()) 
+        if ($nStartTime + $nLifetime > time()) { 
             return false;
-        else
+        } else {
             return true;
+        }
     }
 
     /**
@@ -191,7 +196,6 @@ class CSession
         else
         {
             $oException = new SessionKeyEmptyException($sKey);     
-            $oException->AddTrace(__FILE__, __LINE__, __FUNCTION__, __CLASS__);
             $oException->AddVars('Key',$sKey);
             throw $oException;
         }
